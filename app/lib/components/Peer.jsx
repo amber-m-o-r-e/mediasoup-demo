@@ -40,6 +40,8 @@ const Peer = (props) =>
 				<If condition={!videoConsumer}>
 					<div className='icon webcam-off' />
 				</If>
+
+				<div className='icon maximize' onClick={roomClient.doMaximize.bind(this)}/>
 			</div>
 
 			<PeerView

@@ -119,8 +119,6 @@ class Room extends React.Component
 						/>
 					</div>
 
-					<Stats />
-
 					<If condition={window.NETWORK_THROTTLE_SECRET}>
 						<NetworkThrottle
 							secret={window.NETWORK_THROTTLE_SECRET}

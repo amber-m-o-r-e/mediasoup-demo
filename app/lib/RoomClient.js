@@ -5,6 +5,7 @@ import { getProtooUrl } from './urlFactory';
 import * as cookiesManager from './cookiesManager';
 import * as requestActions from './redux/requestActions';
 import * as stateActions from './redux/stateActions';
+import { $CombinedState } from 'redux';
 
 const VIDEO_CONSTRAINS =
 {
@@ -1607,6 +1608,20 @@ export default class RoomClient
 		}
 	}
 
+	async doMaximize(e)
+	{
+		try
+		{
+			e.target.classList.toggle("minimize");
+			e.target.classList.toggle("maximize");
+			e.target.parentNode.parentNode.parentNode.classList.toggle("peer-maximize");
+		}
+		catch (error)
+		{
+			logger.error('setConsumerPriority() | failed:%o', error);
+		}
+	}
+
 	async setConsumerPriority(consumerId, priority)
 	{
 		logger.debug(
@@ -2508,4 +2523,5 @@ export default class RoomClient
 
 		return this._externalVideoStream;
 	}
+
 }
