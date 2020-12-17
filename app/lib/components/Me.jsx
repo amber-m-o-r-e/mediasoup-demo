@@ -8,6 +8,7 @@ import * as appPropTypes from './appPropTypes';
 import { withRoomContext } from '../RoomContext';
 import * as stateActions from '../redux/stateActions';
 import PeerView from './PeerView';
+import { isMobile } from "react-device-detect";
 
 class Me extends React.Component
 {
@@ -117,18 +118,20 @@ class Me extends React.Component
 							onClick={() => roomClient.changeWebcam()}
 						/>
 
-						<div
-							className={classnames('button', 'share', shareState, {
-								disabled : me.shareInProgress || me.webcamInProgress
-							})}
-							onClick={() =>
-							{
-								if (shareState === 'on')
-									roomClient.disableShare();
-								else
-									roomClient.enableShare();
-							}}
-						/>
+						<If condition={!isMobile}>
+							<div
+								className={classnames('button', 'share', shareState, {
+									disabled : me.shareInProgress || me.webcamInProgress
+								})}
+								onClick={() =>
+								{
+									if (shareState === 'on')
+										roomClient.disableShare();
+									else
+										roomClient.enableShare();
+								}}
+							/>
+						</If>
 					</div>
 				</If>
 
