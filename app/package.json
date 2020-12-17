@@ -26,6 +26,7 @@
     "protoo-client": "^4.0.4",
     "random-string": "^0.2.0",
     "react": "^16.12.0",
+    "react-device-detect": "^1.14.0",
     "react-dom": "^16.12.0",
     "react-draggable": "^3.3.2",
     "react-dropzone": "^10.2.1",

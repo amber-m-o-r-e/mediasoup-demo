@@ -5,6 +5,7 @@ import * as appPropTypes from './appPropTypes';
 import { withRoomContext } from '../RoomContext';
 import * as stateActions from '../redux/stateActions';
 import PeerView from './PeerView';
+import { isMobile } from "react-device-detect";
 
 const Peer = (props) =>
 {
@@ -30,6 +31,17 @@ const Peer = (props) =>
 		!videoConsumer.remotelyPaused
 	);
 
+	function MaximizeDiv(props) {
+		const isMobile = props.isMobile;
+		
+		if (isMobile) {
+			return <div></div>;
+		}
+		else {
+			return <div className='icon maximize' onClick={roomClient.doMaximize.bind(this)}/>;
+		}
+	}
+
 	return (
 		<div data-component='Peer'>
 			<div className='indicators'>
@@ -41,7 +53,7 @@ const Peer = (props) =>
 					<div className='icon webcam-off' />
 				</If>
 
-				<div className='icon maximize' onClick={roomClient.doMaximize.bind(this)}/>
+				<MaximizeDiv isMobile={isMobile}></MaximizeDiv>
 			</div>
 
 			<PeerView
