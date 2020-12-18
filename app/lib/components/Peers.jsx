@@ -13,17 +13,21 @@ const Peers = ({ peers, activeSpeakerId }) =>
 			{
 				peers.map((peer) =>
 				{
-					return (
-						<Appear key={peer.id} duration={1000}>
-							<div
-								className={classnames('peer-container', {
-									'active-speaker' : peer.id === activeSpeakerId
-								})}
-							>
-								<Peer id={peer.id} />
-							</div>
-						</Appear>
-					);
+					if(peer.displayName.toString() == '00000000-VIDEO-RECORDER') {
+						return (<div></div>);
+					}
+					else {
+						return (
+							<Appear key={peer.id} duration={1000}>
+								<div
+									className={classnames('peer-container', {
+										'active-speaker' : peer.id === activeSpeakerId
+									})}>
+									<Peer id={peer.id} />
+								</div>
+							</Appear>
+						);
+					}
 				})
 			}
 		</div>
