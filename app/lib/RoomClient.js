@@ -1612,9 +1612,16 @@ export default class RoomClient
 	{
 		try
 		{
-			e.target.classList.toggle("minimize");
-			e.target.classList.toggle("maximize");
 			e.target.parentNode.parentNode.parentNode.classList.toggle("peer-maximize");
+
+			if(e.target.parentNode.parentNode.parentNode.classList.contains("peer-maximize")) {
+				e.target.classList.remove("maximize");
+				e.target.classList.add("minimize");
+			}
+			else {
+				e.target.classList.remove("minimize");
+				e.target.classList.add("maximize");
+			}
 		}
 		catch (error)
 		{

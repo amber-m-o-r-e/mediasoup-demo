@@ -82,6 +82,29 @@ class Me extends React.Component
 			>
 				<If condition={connected}>
 					<div className='controls'>
+
+						<div
+							className={classnames('button', 'change-webcam', changeWebcamState, {
+								disabled : me.webcamInProgress || me.shareInProgress
+							})}
+							onClick={() => roomClient.changeWebcam()}
+						/>
+
+						<If condition={!isMobile}>
+							<div
+								className={classnames('button', 'share', shareState, {
+									disabled : me.shareInProgress || me.webcamInProgress
+								})}
+								onClick={() =>
+								{
+									if (shareState === 'on')
+										roomClient.disableShare();
+									else
+										roomClient.enableShare();
+								}}
+							/>
+						</If>
+
 						<div
 							className={classnames('button', 'mic', micState)}
 							onClick={() =>
@@ -110,28 +133,6 @@ class Me extends React.Component
 								}
 							}}
 						/>
-
-						<div
-							className={classnames('button', 'change-webcam', changeWebcamState, {
-								disabled : me.webcamInProgress || me.shareInProgress
-							})}
-							onClick={() => roomClient.changeWebcam()}
-						/>
-
-						<If condition={!isMobile}>
-							<div
-								className={classnames('button', 'share', shareState, {
-									disabled : me.shareInProgress || me.webcamInProgress
-								})}
-								onClick={() =>
-								{
-									if (shareState === 'on')
-										roomClient.disableShare();
-									else
-										roomClient.enableShare();
-								}}
-							/>
-						</If>
 					</div>
 				</If>
 
