@@ -37,87 +37,91 @@ class Room extends React.Component
 						<p className={classnames('text', room.state)}>{room.state}</p>
 					</div>
 
-					<div className='room-link-wrapper'>
-						<div className='room-link'>
-							<a
-								className='link'
-								href={room.url}
-								target='_blank'
-								rel='noopener noreferrer'
-								onClick={(event) =>
-								{
-									// If this is a 'Open in new window/tab' don't prevent
-									// click default action.
-									if (
-										event.ctrlKey || event.shiftKey || event.metaKey ||
-										// Middle click (IE > 9 and everyone else).
-										(event.button && event.button === 1)
-									)
+					<If condition={ me.displayName.toString() != '00000000-VIDEO-RECORDER' }>
+						<div className='room-link-wrapper'>
+							<div className='room-link'>
+								<a
+									className='link'
+									href={room.url}
+									target='_blank'
+									rel='noopener noreferrer'
+									onClick={(event) =>
 									{
-										return;
-									}
+										// If this is a 'Open in new window/tab' don't prevent
+										// click default action.
+										if (
+											event.ctrlKey || event.shiftKey || event.metaKey ||
+											// Middle click (IE > 9 and everyone else).
+											(event.button && event.button === 1)
+										)
+										{
+											return;
+										}
 
-									event.preventDefault();
+										event.preventDefault();
 
-									clipboardCopy(room.url)
-										.then(onRoomLinkCopy);
-								}}
-							>
-								invitation link
-							</a>
+										clipboardCopy(room.url)
+											.then(onRoomLinkCopy);
+									}}
+								>
+									invitation link
+								</a>
+							</div>
 						</div>
-					</div>
+					</If>
 
 					<Peers />
 
-					<div
-						className={classnames('me-container', {
-							'active-speaker' : amActiveSpeaker
-						})}
-					>
-						<Me />
-					</div>
-
-					<div className='chat-input-container'>
-						<ChatInput />
-					</div>
-
-					<div className='sidebar'>
+					<If condition={ me.displayName.toString() != '00000000-VIDEO-RECORDER' }>
 						<div
-							className={classnames('button', 'hide-videos', {
-								on       : me.audioOnly,
-								disabled : me.audioOnlyInProgress
+							className={classnames('me-container', {
+								'active-speaker' : amActiveSpeaker
 							})}
-							data-tip={'Show/hide participants\' video'}
-							onClick={() =>
-							{
-								me.audioOnly
-									? roomClient.disableAudioOnly()
-									: roomClient.enableAudioOnly();
-							}}
-						/>
+						>
+							<Me />
+						</div>
 
-						<div
-							className={classnames('button', 'mute-audio', {
-								on : me.audioMuted
-							})}
-							data-tip={'Mute/unmute participants\' audio'}
-							onClick={() =>
-							{
-								me.audioMuted
-									? roomClient.unmuteAudio()
-									: roomClient.muteAudio();
-							}}
-						/>
+						<div className='chat-input-container'>
+							<ChatInput />
+						</div>
 
-						<div
-							className={classnames('button', 'restart-ice', {
-								disabled : me.restartIceInProgress
-							})}
-							data-tip='Restart ICE'
-							onClick={() => roomClient.restartIce()}
-						/>
-					</div>
+						<div className='sidebar'>
+							<div
+								className={classnames('button', 'hide-videos', {
+									on       : me.audioOnly,
+									disabled : me.audioOnlyInProgress
+								})}
+								data-tip={'Show/hide participants\' video'}
+								onClick={() =>
+								{
+									me.audioOnly
+										? roomClient.disableAudioOnly()
+										: roomClient.enableAudioOnly();
+								}}
+							/>
+
+							<div
+								className={classnames('button', 'mute-audio', {
+									on : me.audioMuted
+								})}
+								data-tip={'Mute/unmute participants\' audio'}
+								onClick={() =>
+								{
+									me.audioMuted
+										? roomClient.unmuteAudio()
+										: roomClient.muteAudio();
+								}}
+							/>
+
+							<div
+								className={classnames('button', 'restart-ice', {
+									disabled : me.restartIceInProgress
+								})}
+								data-tip='Restart ICE'
+								onClick={() => roomClient.restartIce()}
+							/>
+						</div>
+					</If>
 
 					<If condition={window.NETWORK_THROTTLE_SECRET}>
 						<NetworkThrottle
