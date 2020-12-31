@@ -395,6 +395,29 @@ async function createExpressApp()
 			}
 		});
 
+        /**
+         * API GET resource that returns the peers of
+         * the room.
+         */
+        expressApp.get(
+            '/rooms/:roomId/peers', (req, res) =>
+            {
+                    
+                    //console.log("req.room: ", req.room);
+                    var data = [];
+
+                    try{ 
+                            console.log("Entries: ", (req.room._protooRoom || {})._peers.entries());
+                            for (const [key, value] of (req.room._protooRoom || {})._peers.entries()) {
+                                    data.push(key);
+                            }
+                    } catch(e) {}
+
+                    res.status(200).json(data);
+            });
+
+            
+
 	/**
 	 * Error handler.
 	 */
