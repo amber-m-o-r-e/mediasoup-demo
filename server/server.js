@@ -22,7 +22,8 @@ const Logger = require('./lib/Logger');
 const Room = require('./lib/Room');
 const interactiveServer = require('./lib/interactiveServer');
 const interactiveClient = require('./lib/interactiveClient');
-
+const redis = require("redis");
+const redisCli = null;
 const logger = new Logger();
 
 // Async queue to manage rooms.
@@ -57,6 +58,8 @@ run();
 
 async function run()
 {
+	redisCli = redis.createClient(config.redis_url);
+
 	// Open the interactive server.
 	await interactiveServer();
 
@@ -135,6 +138,18 @@ async function createExpressApp()
 	expressApp = express();
 
 	expressApp.use(bodyParser.json());
+
+	/**
+	 * API GET resource that returns the mediasoup Router RTP capabilities of
+	 * the room.
+	 */
+	expressApp.get(
+		'/version', (req, res) =>
+		{
+			res.status(200).json({
+				'version': '1.0'
+			});
+		});
 
 	/**
 	 * For every API request, verify that the roomId in the path matches and
@@ -438,6 +453,13 @@ async function createExpressApp()
 				next();
 			}
 		});
+
+	process.on('exit', function() {
+		try {
+			redisCli.end(true);
+		}
+		catch(e) {}
+	});
 }
 
 /**
@@ -549,6 +571,7 @@ async function getOrCreateRoom({ roomId })
 
 		room = await Room.create({ mediasoupWorker, roomId });
 
+		redisCli.set(roomId, config.server_ip);
 		rooms.set(roomId, room);
 		room.on('close', () => rooms.delete(roomId));
 	}
