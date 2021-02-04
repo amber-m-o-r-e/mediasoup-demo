@@ -14,6 +14,8 @@ module.exports =
 {
 	// Listening hostname (just for `gulp live` task).
 	domain : process.env.DOMAIN || 'localhost',
+	redis_url: '',
+	server_ip: '',
 	// Signaling settings (protoo WebSocket server and HTTP API server).
 	https  :
 	{

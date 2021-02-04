@@ -22,8 +22,9 @@ const Logger = require('./lib/Logger');
 const Room = require('./lib/Room');
 const interactiveServer = require('./lib/interactiveServer');
 const interactiveClient = require('./lib/interactiveClient');
-
+const redis = require("redis");
 const logger = new Logger();
+let redisCli = null;
 
 // Async queue to manage rooms.
 // @type {AwaitQueue}
@@ -57,6 +58,10 @@ run();
 
 async function run()
 {
+	try{
+		redisCli = redis.createClient(config.redis_url);
+	}
+	catch(e) {}
 	// Open the interactive server.
 	await interactiveServer();
 
@@ -438,6 +443,13 @@ async function createExpressApp()
 				next();
 			}
 		});
+
+	process.on('exit', function() {
+		try {
+			redisCli.end(true);
+		}
+		catch(e) {}
+	});
 }
 
 /**
@@ -549,6 +561,7 @@ async function getOrCreateRoom({ roomId })
 
 		room = await Room.create({ mediasoupWorker, roomId });
 
+		redisCli.set(roomId, config.server_ip);
 		rooms.set(roomId, room);
 		room.on('close', () => rooms.delete(roomId));
 	}
