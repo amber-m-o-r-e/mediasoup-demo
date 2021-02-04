@@ -142,6 +142,18 @@ async function createExpressApp()
 	expressApp.use(bodyParser.json());
 
 	/**
+	 * API GET resource that returns the mediasoup Router RTP capabilities of
+	 * the room.
+	 */
+	expressApp.get(
+		'/version', (req, res) =>
+		{
+			res.status(200).json({
+				'version': '1.0'
+			});
+		});
+
+	/**
 	 * For every API request, verify that the roomId in the path matches and
 	 * existing room.
 	 */
