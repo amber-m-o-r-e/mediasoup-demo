@@ -61,7 +61,9 @@ async function run()
 	try{
 		redisCli = redis.createClient(config.redis_url);
 	}
-	catch(e) {}
+	catch(e) {
+		console.log(e);
+	}
 	// Open the interactive server.
 	await interactiveServer();
 
@@ -573,7 +575,11 @@ async function getOrCreateRoom({ roomId })
 
 		room = await Room.create({ mediasoupWorker, roomId });
 
-		redisCli.set(roomId, config.server_ip);
+		try {
+			redisCli.set(roomId, config.server_ip);
+		}
+		catch(e) {}
+
 		rooms.set(roomId, room);
 		room.on('close', () => rooms.delete(roomId));
 	}
