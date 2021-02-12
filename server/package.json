@@ -14,6 +14,7 @@
   "dependencies": {
     "@sitespeed.io/throttle": "^0.5.4",
     "awaitqueue": "^2.1.1",
+    "aws-sdk": "^2.842.0",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
     "debug": "^4.1.1",

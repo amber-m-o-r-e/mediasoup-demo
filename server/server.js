@@ -22,9 +22,9 @@ const Logger = require('./lib/Logger');
 const Room = require('./lib/Room');
 const interactiveServer = require('./lib/interactiveServer');
 const interactiveClient = require('./lib/interactiveClient');
-const redis = require("redis");
+const AWS = require("aws-sdk");
 const logger = new Logger();
-let redisCli = null;
+let lambda = null;
 
 // Async queue to manage rooms.
 // @type {AwaitQueue}
@@ -59,7 +59,12 @@ run();
 async function run()
 {
 	try{
-		redisCli = redis.createClient(config.redis_url);
+		let creds = new AWS.Credentials(config.aws.accessKeyId, config.aws.secretAccessKey, "");
+		lambda = new AWS.Lambda({
+			"region": config.aws.region,
+			"apiVersion": config.aws.apiVersion,
+			"credentials": creds
+		});
 	}
 	catch(e) {
 		console.log(e);
@@ -457,13 +462,6 @@ async function createExpressApp()
 				next();
 			}
 		});
-
-	process.on('exit', function() {
-		try {
-			redisCli.end(true);
-		}
-		catch(e) {}
-	});
 }
 
 /**
@@ -576,7 +574,24 @@ async function getOrCreateRoom({ roomId })
 		room = await Room.create({ mediasoupWorker, roomId });
 
 		try {
-			redisCli.set(roomId, config.server_ip);
+			//redisCli.set(roomId, config.server_ip);
+			var input = {
+				FunctionName: "SimpleRedisClient",
+				Payload: JSON.stringify({
+					command: "set",
+					key: roomId,
+					value: config.server_ip
+				})
+			};
+
+			lambda.invoke(input, function(error, data) {
+				if(error) {
+					console.log("SimpleRedisClient: ", error);
+				}
+				else {
+					console.log("SimpleRedisClient: redis entry made.");
+				}
+			});
 		}
 		catch(e) {}
 

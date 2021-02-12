@@ -16,6 +16,18 @@ module.exports =
 	domain : process.env.DOMAIN || 'localhost',
 	redis_url: '',
 	server_ip: '',
+	aws: {
+		accessKeyId: '',
+		secretAccessKey: '',
+		region: '',
+		apiVersion: ''
+	},	
+	aws: {
+		accessKeyId: 'AKIA3HPBJZHPXKXF75X2',
+		secretAccessKey: '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',
+		region: 'us-east-1',
+		apiVersion: '2015-03-31'
+	},
 	// Signaling settings (protoo WebSocket server and HTTP API server).
 	https  :
 	{
