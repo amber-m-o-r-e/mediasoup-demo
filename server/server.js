@@ -102,8 +102,7 @@ async function runMediasoupWorkers()
 				logLevel   : config.mediasoup.workerSettings.logLevel,
 				logTags    : config.mediasoup.workerSettings.logTags,
 				rtcMinPort : Number(config.mediasoup.workerSettings.rtcMinPort),
-				rtcMaxPort : Number(config.mediasoup.workerSettings.rtcMaxPort),
-				'profile-id': 0
+				rtcMaxPort : Number(config.mediasoup.workerSettings.rtcMaxPort)
 			});
 
 		worker.on('died', () =>
