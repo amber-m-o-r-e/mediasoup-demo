@@ -1309,6 +1309,7 @@ export default class RoomClient
 				videoGoogleStartBitrate : 1000
 			};
 
+			/*
 			if (this._forceH264)
 			{
 				codec = this._mediasoupDevice.rtpCapabilities.codecs
@@ -1320,6 +1321,18 @@ export default class RoomClient
 				}
 			}
 			else if (this._forceVP9)
+			{
+				codec = this._mediasoupDevice.rtpCapabilities.codecs
+					.find((c) => c.mimeType.toLowerCase() === 'video/vp9');
+
+				if (!codec)
+				{
+					throw new Error('desired VP9 codec+configuration is not supported');
+				}
+			}
+			*/
+
+			if (this._forceVP9)
 			{
 				codec = this._mediasoupDevice.rtpCapabilities.codecs
 					.find((c) => c.mimeType.toLowerCase() === 'video/vp9');
